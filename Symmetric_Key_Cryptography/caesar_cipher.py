@@ -18,8 +18,8 @@ def encrypt(text, s):
 
 
 # check the above function
-text = str(input(" ENTER THE TEXT TO BE ENCODED WITH CAESER TECHNIQUE: "))
-shift = int(input(" ENTER THE SHIFT FOR CAESER TECHNIQUE:        "))
-print ("Text  : " + text)
-print ("Shift : " + str(shift))
-print ("Cipher: " + encrypt(text, shift))
+message = str(input(" ENTER THE TEXT TO BE ENCODED WITH CAESER TECHNIQUE: "))
+shift = int(input(" ENTER THE SHIFT FOR CAESER TECHNIQUE:"))
+print("Text  : " + message)
+print("Shift : " + str(shift))
+print("Cipher: " + encrypt(message, shift))
