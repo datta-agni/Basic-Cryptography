@@ -229,9 +229,3 @@ class DiffieHellman:
             raise ValueError("Invalid public key")
         shared_key = pow(remote_public_key, local_private_key, prime)
         return sha256(str(shared_key).encode()).hexdigest()
-
-
-if __name__ == "__main__":
-    import doctest
-
-    doctest.testmod()
