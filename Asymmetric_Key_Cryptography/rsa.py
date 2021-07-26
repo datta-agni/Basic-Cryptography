@@ -1,9 +1,11 @@
 # basic implementation of Rivest–Shamir–Adleman algorithm
 import random
-# change the @max_PrimeLength for better keys and security
+# change the max_PrimeLength for longer keys and security
 max_PrimLength = 10**15
 
 # calculates the modular inverse from e and phi
+
+
 def egcd(a, b):
     if a == 0:
         return (b, 0, 1)
@@ -82,12 +84,19 @@ def encrypt(text, public_key):
     return ctext
 
 
-if __name__ == '__main__':
+def main():
+
     public_key, private_key = generate_keyPairs()
+    text = str(input("Enter the text you want to be encrypted with RSA: "))
+
     print("Public: ", public_key)
     print("Private: ", private_key)
 
-    ctext = encrypt("Hello World", public_key)
+    ctext = encrypt(text, public_key)
     print("encrypted  =", ctext)
     plaintext = decrypt(ctext, private_key)
     print("decrypted =", plaintext)
+
+
+if __name__ == '__main__':
+    main()
