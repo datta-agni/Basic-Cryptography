@@ -1,6 +1,7 @@
 from string import ascii_letters
 from typing import Dict, Optional
 
+
 def encrypt(input_string: str, key: int, alphabet: Optional[str] = None) -> str:
     # Set default alphabet to lower and upper case english chars
     alpha = alphabet or ascii_letters
