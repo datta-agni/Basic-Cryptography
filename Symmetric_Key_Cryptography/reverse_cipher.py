@@ -11,6 +11,11 @@ def rev_string_cipher(text):
     print("The cipher text is :", encoded)
 
 
-# takes input
-message = str(input("ENTER A CIPHER TEXT: "))
-rev_string_cipher(message)
+def main():
+    # takes input
+    message = str(input("ENTER A CIPHER TEXT: "))
+    rev_string_cipher(message)
+
+
+if __name__ == '__main__':
+    main()
