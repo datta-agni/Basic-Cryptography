@@ -45,7 +45,7 @@ def brute_force(input_string: str, alphabet: Optional[str] = None) -> Dict[int, 
     return brute_force_data
 
 
-if __name__ == "__main__":
+def main():
     while True:
         print(f'\n{"-" * 10}\n Menu\n{"-" * 10}')
         print(*["1.Encrypt", "2.Decrypt", "3.BruteForce", "4.Quit"], sep="\n")
@@ -76,3 +76,7 @@ if __name__ == "__main__":
         elif choice == "4":
             print("Goodbye.")
             break
+
+
+if __name__ == "__main__":
+    main()
