@@ -1,7 +1,8 @@
 # basic implementation of Rivest–Shamir–Adleman algorithm
 import random
 # change the max_PrimeLength for longer keys and security
-max_PrimLength = 10**15
+n = int(input("Enter the key size: "))
+max_PrimLength = 10**n
 
 # calculates the modular inverse from e and phi
 
