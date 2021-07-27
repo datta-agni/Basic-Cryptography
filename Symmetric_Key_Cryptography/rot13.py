@@ -1,3 +1,4 @@
+# ROT13 cipher
 def dencrypt(s: str, n: int = 13) -> str:
     out = ""
     for c in s:
@@ -20,4 +21,5 @@ def main() -> None:
     print("Decryption: ", s2)
 
 
-main()
+if __name__ == '__main__':
+    main()
