@@ -1,3 +1,4 @@
+# Reverse string cipher
 def rev_string_cipher(text):
     # function reverses the given string
     size = len(text) - 1
