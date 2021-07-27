@@ -1,2 +1,4 @@
 # Windows configuration file.
 *.ini
+# Compiled Python files.
+*.pyc
