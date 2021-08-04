@@ -28,14 +28,14 @@ def is_prime(num):
         return True
     if num < 2 or num % 2 == 0:
         return False
-    for n in range(3, int(num**0.5)+2, 2):
+    for n in range(3, int(num**0.5) + 2, 2):
         if num % n == 0:
             return False
     return True
 
 
 def generateRandomPrim():
-    while(1):
+    while (1):
         ranPrime = random.randint(0, max_PrimLength)
         if is_prime(ranPrime):
             return ranPrime
@@ -45,10 +45,10 @@ def generate_keyPairs():
     p = generateRandomPrim()
     q = generateRandomPrim()
 
-    n = p*q
+    n = p * q
     print("n ", n)
     # phi(n) = phi(p)*phi(q)
-    phi = (p-1) * (q-1)
+    phi = (p - 1) * (q - 1)
     print("phi ", phi)
 
     # choose e coprime to n and 1 > e > phi
@@ -64,7 +64,7 @@ def generate_keyPairs():
 
     # make sure d is positive
     d = d % phi
-    if(d < 0):
+    if (d < 0):
         d += phi
 
     return ((e, n), (d, n))

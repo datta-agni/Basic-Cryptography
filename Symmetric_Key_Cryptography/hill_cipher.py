@@ -46,13 +46,14 @@ def get_text_input(message, alphabet):
             return text
         else:
             print(
-                "\nThe text must contain only characters from the english alphabet ([A to Z] or [a to z]).")
+                "\nThe text must contain only characters from the english alphabet ([A to Z] or [a to z])."
+            )
 
 
 # Check if the key is a square in length
 def is_square(key):
     key_length = len(key)
-    if 2 <= key_length == int(math.sqrt(key_length)) ** 2:
+    if 2 <= key_length == int(math.sqrt(key_length))**2:
         return True
     else:
         return False
@@ -149,8 +150,8 @@ def main():
         # Run the function selected by the user
         if choice == 1:
             # Asks the user the plaintext and the key for the encryption and checks the input
-            plaintext = get_text_input(
-                "\nInsert the text to be encrypted: ", alphabet)
+            plaintext = get_text_input("\nInsert the text to be encrypted: ",
+                                       alphabet)
             key = get_text_input("Insert the key for encryption: ", alphabet)
 
             if is_square(key):
@@ -190,8 +191,8 @@ def main():
 
                 if k_inverse is not None:
                     # Get the m-grams matrix c of the ciphertext
-                    c = get_text_matrix(
-                        ciphertext, k_inverse.shape[0], alphabet)
+                    c = get_text_matrix(ciphertext, k_inverse.shape[0],
+                                        alphabet)
 
                     print("\nKey Matrix:\n", k)
                     print("Ciphertext Matrix:\n", c)
@@ -208,7 +209,9 @@ def main():
                     print("Generated Plaintext: ", plaintext)
                     print("Generated Plaintext Matrix:\n", p, "\n")
                 else:
-                    print("\nThe matrix of the key provided is not invertible.\n")
+                    print(
+                        "\nThe matrix of the key provided is not invertible.\n"
+                    )
             else:
                 print("\nThe key must be a square and size >= 2.\n")
 
@@ -217,7 +220,8 @@ def main():
             plaintext = get_text_input(
                 "\nInsert the plaintext for the attack: ", alphabet)
             ciphertext = get_text_input(
-                "Insert the ciphertext of the plaintext for the attack: ", alphabet)
+                "Insert the ciphertext of the plaintext for the attack: ",
+                alphabet)
 
             # Asks the user the length of the grams
             m = get_m()
@@ -252,12 +256,16 @@ def main():
                         print("Generated Key Matrix:\n", k, "\n")
                     else:
                         print(
-                            "\nThe number of m-grams for plaintext and ciphertext are different.\n")
+                            "\nThe number of m-grams for plaintext and ciphertext are different.\n"
+                        )
                 else:
-                    print("\nThe matrix of the plaintext provided is not invertible.\n")
+                    print(
+                        "\nThe matrix of the plaintext provided is not invertible.\n"
+                    )
             else:
                 print(
-                    "\nThe length of the plaintext must be compatible with the length of the grams (m).\n")
+                    "\nThe length of the plaintext must be compatible with the length of the grams (m).\n"
+                )
         elif choice == 4:
             sys.exit(0)
         input("Press Enter to continue.\n")

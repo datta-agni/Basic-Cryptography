@@ -1,4 +1,6 @@
 # ROT13 cipher
+
+
 def dencrypt(s: str, n: int = 13) -> str:
     out = ""
     for c in s:

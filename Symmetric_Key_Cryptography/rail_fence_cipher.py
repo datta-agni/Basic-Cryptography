@@ -1,5 +1,6 @@
 # RailFence Cipher
 
+
 def fence(lst, rail):
     fence = [[None] * len(lst) for n in range(rail)]
     rails = range(rail - 1) + range(rail - 1, 0, -1)
