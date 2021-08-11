@@ -53,7 +53,7 @@ def get_text_input(message, alphabet):
 # Check if the key is a square in length
 def is_square(key):
     key_length = len(key)
-    if 2 <= key_length == int(math.sqrt(key_length))**2:
+    if 2 <= key_length == int(math.sqrt(key_length)) ** 2:
         return True
     else:
         return False
@@ -90,15 +90,14 @@ def encrypt(key, plaintext, alphabet):
     # Encrypt the plaintext with the key provided k, calculate matrix c of ciphertext
     ciphertext = np.zeros((m, m_grams)).astype(int)
     for i in range(m_grams):
-        ciphertext[:, i] = np.reshape(
-            np.dot(key, plaintext[:, i]) % len(alphabet), m)
+        ciphertext[:, i] = np.reshape(np.dot(key, plaintext[:, i]) % len(alphabet), m)
     return ciphertext
 
 
 # Transform a matrix to a text, according to the alphabet
 def matrix_to_text(matrix, order, alphabet):
-    if order == 't':
-        text_array = np.ravel(matrix, order='F')
+    if order == "t":
+        text_array = np.ravel(matrix, order="F")
     else:
         text_array = np.ravel(matrix)
     text = ""
@@ -150,8 +149,7 @@ def main():
         # Run the function selected by the user
         if choice == 1:
             # Asks the user the plaintext and the key for the encryption and checks the input
-            plaintext = get_text_input("\nInsert the text to be encrypted: ",
-                                       alphabet)
+            plaintext = get_text_input("\nInsert the text to be encrypted: ", alphabet)
             key = get_text_input("Insert the key for encryption: ", alphabet)
 
             if is_square(key):
@@ -179,7 +177,8 @@ def main():
         elif choice == 2:
             # Asks the user the ciphertext and the key for the encryption and checks the input
             ciphertext = get_text_input(
-                "\nInsert the ciphertext to be decrypted: ", alphabet)
+                "\nInsert the ciphertext to be decrypted: ", alphabet
+            )
             key = get_text_input("Insert the key for decryption: ", alphabet)
 
             if is_square(key):
@@ -191,8 +190,7 @@ def main():
 
                 if k_inverse is not None:
                     # Get the m-grams matrix c of the ciphertext
-                    c = get_text_matrix(ciphertext, k_inverse.shape[0],
-                                        alphabet)
+                    c = get_text_matrix(ciphertext, k_inverse.shape[0], alphabet)
 
                     print("\nKey Matrix:\n", k)
                     print("Ciphertext Matrix:\n", c)
@@ -209,19 +207,18 @@ def main():
                     print("Generated Plaintext: ", plaintext)
                     print("Generated Plaintext Matrix:\n", p, "\n")
                 else:
-                    print(
-                        "\nThe matrix of the key provided is not invertible.\n"
-                    )
+                    print("\nThe matrix of the key provided is not invertible.\n")
             else:
                 print("\nThe key must be a square and size >= 2.\n")
 
         elif choice == 3:
             # Asks the user the text and the ciphertext to use them for the plaintext attack
             plaintext = get_text_input(
-                "\nInsert the plaintext for the attack: ", alphabet)
+                "\nInsert the plaintext for the attack: ", alphabet
+            )
             ciphertext = get_text_input(
-                "Insert the ciphertext of the plaintext for the attack: ",
-                alphabet)
+                "Insert the ciphertext of the plaintext for the attack: ", alphabet
+            )
 
             # Asks the user the length of the grams
             m = get_m()
@@ -259,9 +256,7 @@ def main():
                             "\nThe number of m-grams for plaintext and ciphertext are different.\n"
                         )
                 else:
-                    print(
-                        "\nThe matrix of the plaintext provided is not invertible.\n"
-                    )
+                    print("\nThe matrix of the plaintext provided is not invertible.\n")
             else:
                 print(
                     "\nThe length of the plaintext must be compatible with the length of the grams (m).\n"
@@ -271,5 +266,5 @@ def main():
         input("Press Enter to continue.\n")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
