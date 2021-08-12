@@ -3,9 +3,9 @@
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 [![Made withJupyter](https://img.shields.io/badge/Made%20with-Jupyter-orange?style=for-the-badge&logo=Jupyter)](https://jupyter.org/try)
 
-Implementation Cryptographical Algorithms:
+## Implementation Cryptographical Algorithms:
 
-## Symmetric-Key Cryptography:
+### Symmetric-Key Cryptography:
 
 * Caesar Cipher
 * Hill Cipher
@@ -16,11 +16,11 @@ Implementation Cryptographical Algorithms:
 * Transposition Cipher
 * Vigenere Cipher 
 
-## Asymmetric-Key Cryptography:
+### Asymmetric-Key Cryptography:
 
 * Diffie-Hellmann Key Exchange
 * RSA
 
-## Cryptographical Hash Function:
+### Cryptographical Hash Function:
 
 * Base64 Conversion
