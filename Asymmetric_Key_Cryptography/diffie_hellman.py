@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import hashlib
 from binascii import hexlify
 
