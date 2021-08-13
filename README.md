@@ -7,6 +7,8 @@
 
 ### Symmetric-Key Cryptography:
 
+* Affine Cipher
+
 * Caesar Cipher
 * Hill Cipher
 * One Time Pad Cipher
