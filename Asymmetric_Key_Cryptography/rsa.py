@@ -97,7 +97,7 @@ def generate_key_pair():
 
     """phi(n) = phi(p) * phi(q)"""
     phi = (p - 1) * (q - 1)
-    print("n:\n", n, "\n" "phi:\n", phi, "\n")
+    print("n:" + "\n" + str(n) + "\n" + "\n" + "phi:" + "\n" + str(phi) + "\n")
 
     """choose e coprime to n and 1 > e > phi"""
     e = random.randint(1, phi)
