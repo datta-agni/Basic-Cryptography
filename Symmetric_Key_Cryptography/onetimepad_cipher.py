@@ -6,14 +6,12 @@ import secrets
 import sys
 
 # One-time pad file signature.
-MAGIC = "#one-time pad"
+MAGIC = "#one-time-pad"
 
 
 def make_keys(n, size):
     """Generate ``n`` secure, random keys of ``size`` bytes."""
-    # We're generating and storing keys in their hexadecimal form to make
-    # one-time pad files a little more human readable and to ensure a key
-    # can not start with a hyphen.
+    # We're generating and storing keys in their hexadecimal form to make one-time pad files a little more human readable and to ensure a key can not start with a hyphen.
     return (secrets.token_hex(size) for _ in range(n))
 
 
@@ -127,24 +125,24 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "pad",
-        help=("Path to one-time pad. If neither --encrypt or --decrypt "
-              "are given, will create a new pad."),
+        help=(
+            "Path to one-time pad. If neither --encrypt or --decrypt "
+            "are given, will create a new pad."
+        ),
     )
 
     parser.add_argument(
         "--length",
         type=int,
         default=10,
-        help=
-        "Pad size. Ignored if --encrypt or --decrypt are given. Defaults to 10.",
+        help="Pad size. Ignored if --encrypt or --decrypt are given. Defaults to 10.",
     )
 
     parser.add_argument(
         "--key-size",
         type=int,
         default=64,
-        help=
-        "Key size in bytes. Ignored if --encrypt or --decrypt are given. Defaults to 64.",
+        help="Key size in bytes. Ignored if --encrypt or --decrypt are given. Defaults to 64.",
     )
 
     parser.add_argument(
@@ -154,7 +152,8 @@ if __name__ == "__main__":
         default=sys.stdout.buffer,
         help=(
             "Write encoded/decoded message to a file. Ignored if --encrypt or "
-            "--decrypt is not given. Defaults to stdout."),
+            "--decrypt is not given. Defaults to stdout."
+        ),
     )
 
     group = parser.add_mutually_exclusive_group()
