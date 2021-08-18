@@ -7,6 +7,9 @@ def matrix(x, y, initial):
     return [[initial for i in range(x)] for j in range(y)]
 
 
+"""Starting initialization"""
+k = 0
+flag = 0
 result = list()
 # storing the key
 for c in key:
@@ -15,7 +18,7 @@ for c in key:
             result.append("I")
         else:
             result.append(c)
-flag = 0
+
 # storing the other available characters
 for i in range(65, 91):
     if chr(i) not in result:
@@ -26,14 +29,15 @@ for i in range(65, 91):
             pass
         else:
             result.append(chr(i))
-k = 0
+
 # initialize matrix
-my_matrix = matrix(5, 5, 0)
+matrix = matrix(5, 5, 0)
 # making matrix
 for i in range(0, 5):
     for j in range(0, 5):
-        my_matrix[i][j] = result[k]
+        matrix[i][j] = result[k]
         k += 1
+"""Ending initialization"""
 
 
 # get location of each character
@@ -41,7 +45,7 @@ def locindex(c):
     location = list()
     if c == "J":
         c = "I"
-    for i, j in enumerate(my_matrix):
+    for i, j in enumerate(matrix):
         for k, l in enumerate(j):
             if c == l:
                 location.append(i)
@@ -70,24 +74,24 @@ def encrypt():
         if location[1] == location1[1]:
             print(
                 "{}{}".format(
-                    my_matrix[(location[0] + 1) % 5][location[1]],
-                    my_matrix[(location1[0] + 1) % 5][location1[1]],
+                    matrix[(location[0] + 1) % 5][location[1]],
+                    matrix[(location1[0] + 1) % 5][location1[1]],
                 ),
                 end=" ",
             )
         elif location[0] == location1[0]:
             print(
                 "{}{}".format(
-                    my_matrix[location[0]][(location[1] + 1) % 5],
-                    my_matrix[location1[0]][(location1[1] + 1) % 5],
+                    matrix[location[0]][(location[1] + 1) % 5],
+                    matrix[location1[0]][(location1[1] + 1) % 5],
                 ),
                 end=" ",
             )
         else:
             print(
                 "{}{}".format(
-                    my_matrix[location[0]][location1[1]],
-                    my_matrix[location1[0]][location[1]],
+                    matrix[location[0]][location1[1]],
+                    matrix[location1[0]][location[1]],
                 ),
                 end=" ",
             )
@@ -109,24 +113,24 @@ def decrypt():
         if location[1] == location1[1]:
             print(
                 "{}{}".format(
-                    my_matrix[(location[0] - 1) % 5][location[1]],
-                    my_matrix[(location1[0] - 1) % 5][location1[1]],
+                    matrix[(location[0] - 1) % 5][location[1]],
+                    matrix[(location1[0] - 1) % 5][location1[1]],
                 ),
                 end=" ",
             )
         elif location[0] == location1[0]:
             print(
                 "{}{}".format(
-                    my_matrix[location[0]][(location[1] - 1) % 5],
-                    my_matrix[location1[0]][(location1[1] - 1) % 5],
+                    matrix[location[0]][(location[1] - 1) % 5],
+                    matrix[location1[0]][(location1[1] - 1) % 5],
                 ),
                 end=" ",
             )
         else:
             print(
                 "{}{}".format(
-                    my_matrix[location[0]][location1[1]],
-                    my_matrix[location1[0]][location[1]],
+                    matrix[location[0]][location1[1]],
+                    matrix[location1[0]][location[1]],
                 ),
                 end=" ",
             )
@@ -134,7 +138,7 @@ def decrypt():
 
 
 while 1:
-    choice = int(input("\n 1.Encryption: \n 2.Decryption: \n 3.EXIT "))
+    choice = int(input("\n 1.) Encryption: \n 2.) Decryption: \n 3.) Exit "))
     if choice == 1:
         encrypt()
     elif choice == 2:
@@ -142,4 +146,4 @@ while 1:
     elif choice == 3:
         exit()
     else:
-        print("Choose correct choice")
+        print("Choose correct choice!")
