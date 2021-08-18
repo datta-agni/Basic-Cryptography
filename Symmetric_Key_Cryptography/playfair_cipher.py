@@ -138,7 +138,7 @@ def decrypt():
 
 
 while 1:
-    choice = int(input("\n 1.) Encryption: \n 2.) Decryption: \n 3.) Exit "))
+    choice = int(input("\n1.) Encryption: \n2.) Decryption: \n3.) Exit\n"))
     if choice == 1:
         encrypt()
     elif choice == 2:
