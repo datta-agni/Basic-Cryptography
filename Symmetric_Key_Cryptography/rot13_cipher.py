@@ -1,27 +1,27 @@
 # ROT13 cipher
 
 
-def dencrypt(s: str, n: int = 13) -> str:
-    out = ""
-    for c in s:
-        if "A" <= c <= "Z":
-            out += chr(ord("A") + (ord(c) - ord("A") + n) % 26)
-        elif "a" <= c <= "z":
-            out += chr(ord("a") + (ord(c) - ord("a") + n) % 26)
+def dencrypt(message: str, n: int = 13) -> str:
+    output_text = ""
+    for charecter in message:
+        if "A" <= charecter <= "Z":
+            output_text += chr(ord("A") + (ord(charecter) - ord("A") + n) % 26)
+        elif "a" <= charecter <= "z":
+            output_text += chr(ord("a") + (ord(charecter) - ord("a") + n) % 26)
         else:
-            out += c
-    return out
+            output_text += charecter
+    return output_text
 
 
 def main() -> None:
-    s0 = input("Enter message: ")
+    plaintext = input("Enter message: ")
 
-    s1 = dencrypt(s0, 13)
-    print("Encryption:", s1)
+    ciphertext = dencrypt(plaintext, 13)
+    print("Encryption:", ciphertext)
 
-    s2 = dencrypt(s1, 13)
-    print("Decryption: ", s2)
+    plaintext = dencrypt(ciphertext, 13)
+    print("Decryption: ", plaintext)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

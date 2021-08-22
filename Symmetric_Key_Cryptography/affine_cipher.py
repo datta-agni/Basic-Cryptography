@@ -11,51 +11,53 @@ def euclid_gcd(a, b):
     return gcd, x, y
 
 
+# modular inverse does not exist
 def modinv(a, m):
     gcd, x, y = euclid_gcd(a, m)
     if gcd != 1:
-        # modular inverse does not exist
         return None
     else:
         return x % m
 
 
-# affine cipher encryption function returns the cipher text
-def affine_encrypt(text, key):
+# affine ciphertext encryption function returns the ciphertext
+def affine_encrypt(plaintext, key):
     """
     C = (a * P + b) % 26
     """
     return "".join(
         [
             chr(((key[0] * (ord(t) - ord("A")) + key[1]) % 26) + ord("A"))
-            for t in text.upper().replace(" ", "")
+            for t in plaintext.upper().replace(" ", "")
         ]
     )
 
 
-# affine cipher decryption function returns original text
-def affine_decrypt(cipher, key):
+# affine ciphertext decryption function returns original ciphertext
+def affine_decrypt(ciphertext, key):
     """
     P = (a ^ ( -1 ) * ( C - b )) % 26
     """
     return "".join(
         [
-            chr(((modinv(key[0], 26) * (ord(c) - ord("A") - key[1])) % 26) + ord("A"))
-            for c in cipher
+            chr(
+                ((modinv(key[0], 26) * (ord(charecter) - ord("A") - key[1])) % 26)
+                + ord("A")
+            )
+            for charecter in ciphertext
         ]
     )
 
 
 def main():
-    # declaring text and key
-    text = str(input("Enter the text you want to encode: "))
-    a = int(input("Enter the first half of the key of encryption: "))
-    b = int(input("Enter the second half of the key of encryption: "))
-    key = [a, b]
+    # declaring ciphertext and key
+    message = str(input("Enter the message you want to encrypt: "))
+    key1 = int(input("Enter the first half of the key of encryption: "))
+    key2 = int(input("Enter the second half of the key of encryption: "))
+    key = [key1, key2]
 
     # calling encryption function
-    affine_encrypted_text = affine_encrypt(text, key)
-
+    affine_encrypted_text = affine_encrypt(message, key)
     print("Encrypted Text: {}".format(affine_encrypted_text))
 
     # calling decryption function
