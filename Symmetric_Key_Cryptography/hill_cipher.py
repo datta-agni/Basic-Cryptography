@@ -1,270 +1,182 @@
-import math
 import string
-import sys
-
-import numpy as np
-from sympy import Matrix
+import numpy
 
 
-def menu():
-    while True:
-        print("---- Hill Cipher ----\n")
-        print("1) Encrypt a Message.")
-        print("2) Decipher a Message.")
-        print("3) Force a Ciphertext (Known Plaintext Attack).")
-        print("4) Quit.\n")
-        try:
-            choice = int(input("Select a function to run: "))
-            if 1 <= choice <= 4:
-                return choice
-            else:
-                print("\nYou must enter a number from 1 to 4\n")
-        except ValueError:
-            print("\nYou must enter a number from 1 to 4\n")
-        input("Press Enter to continue.\n")
+def greatest_common_divisor(a: int, b: int) -> int:
+    return b if a == 0 else greatest_common_divisor(b % a, a)
 
 
-# Create two dictionaries, english alphabet to numbers and numbers to english alphabet, and returns them
-def get_alphabet():
-    alphabet = {}
-    for character in string.ascii_uppercase:
-        alphabet[character] = string.ascii_uppercase.index(character)
+class HillCipher:
+    key_string = string.ascii_uppercase + string.digits
+    # This cipher takes alphanumerics into account
+    # i.e. a total of 36 characters
 
-    reverse_alphabet = {}
-    for key, value in alphabet.items():
-        reverse_alphabet[value] = key
+    # take x and return x % len(key_string)
+    modulus = numpy.vectorize(lambda x: x % 36)
 
-    return alphabet, reverse_alphabet
+    to_int = numpy.vectorize(lambda x: round(x))
 
+    def __init__(self, encrypt_key: numpy.ndarray) -> None:
+        """
+        encrypt_key is an NxN numpy array
+        """
+        self.encrypt_key = self.modulus(encrypt_key)  # mod36 calc's on the encrypt key
+        self.check_determinant()  # validate the determinant of the encryption key
+        self.break_key = encrypt_key.shape[0]
 
-# Get input from the user and checks if respects the alphabet
-def get_text_input(message, alphabet):
-    while True:
-        text = input(message)
-        text = text.upper()
-        if all(keys in alphabet for keys in text):
-            return text
-        else:
-            print(
-                "\nThe text must contain only characters from the english alphabet ([A to Z] or [a to z])."
+    def replace_letters(self, letter: str) -> int:
+        """
+        >>> hill_cipher = HillCipher(numpy.array([[2, 5], [1, 6]]))
+        >>> hill_cipher.replace_letters('T')
+        19
+        >>> hill_cipher.replace_letters('0')
+        26
+        """
+        return self.key_string.index(letter)
+
+    def replace_digits(self, num: int) -> str:
+        """
+        >>> hill_cipher = HillCipher(numpy.array([[2, 5], [1, 6]]))
+        >>> hill_cipher.replace_digits(19)
+        'T'
+        >>> hill_cipher.replace_digits(26)
+        '0'
+        """
+        return self.key_string[round(num)]
+
+    def check_determinant(self) -> None:
+        """
+        >>> hill_cipher = HillCipher(numpy.array([[2, 5], [1, 6]]))
+        >>> hill_cipher.check_determinant()
+        """
+        det = round(numpy.linalg.det(self.encrypt_key))
+
+        if det < 0:
+            det = det % len(self.key_string)
+
+        req_l = len(self.key_string)
+        if greatest_common_divisor(det, len(self.key_string)) != 1:
+            raise ValueError(
+                f"determinant modular {req_l} of encryption key({det}) is not co prime "
+                f"w.r.t {req_l}.\nTry another key."
             )
 
+    def process_text(self, text: str) -> str:
+        """
+        >>> hill_cipher = HillCipher(numpy.array([[2, 5], [1, 6]]))
+        >>> hill_cipher.process_text('Testing Hill Cipher')
+        'TESTINGHILLCIPHERR'
+        >>> hill_cipher.process_text('hello')
+        'HELLOO'
+        """
+        chars = [char for char in text.upper() if char in self.key_string]
 
-# Check if the key is a square in length
-def is_square(key):
-    key_length = len(key)
-    if 2 <= key_length == int(math.sqrt(key_length)) ** 2:
-        return True
-    else:
-        return False
+        last = chars[-1]
+        while len(chars) % self.break_key != 0:
+            chars.append(last)
 
+        return "".join(chars)
 
-# Create the matrix k for the key
-def get_key_matrix(key, alphabet):
-    k = list(key)
-    m = int(math.sqrt(len(k)))
-    for (i, character) in enumerate(k):
-        k[i] = alphabet[character]
+    def encrypt(self, text: str) -> str:
+        """
+        >>> hill_cipher = HillCipher(numpy.array([[2, 5], [1, 6]]))
+        >>> hill_cipher.encrypt('testing hill cipher')
+        'WHXYJOLM9C6XT085LL'
+        >>> hill_cipher.encrypt('hello')
+        '85FF00'
+        """
+        text = self.process_text(text.upper())
+        encrypted = ""
 
-    return np.reshape(k, (m, m))
-
-
-# Create the matrix of m-grams of a text, if needed, complete the last m-gram with the last letter of the alphabet
-def get_text_matrix(text, m, alphabet):
-    matrix = list(text)
-    remainder = len(text) % m
-    for (i, character) in enumerate(matrix):
-        matrix[i] = alphabet[character]
-    if remainder != 0:
-        for i in range(m - remainder):
-            matrix.append(25)
-
-    return np.reshape(matrix, (int(len(matrix) / m), m)).transpose()
-
-
-# Encrypt a Message and returns the ciphertext matrix
-def encrypt(key, plaintext, alphabet):
-    m = key.shape[0]
-    m_grams = plaintext.shape[1]
-
-    # Encrypt the plaintext with the key provided k, calculate matrix c of ciphertext
-    ciphertext = np.zeros((m, m_grams)).astype(int)
-    for i in range(m_grams):
-        ciphertext[:, i] = np.reshape(np.dot(key, plaintext[:, i]) % len(alphabet), m)
-    return ciphertext
-
-
-# Transform a matrix to a text, according to the alphabet
-def matrix_to_text(matrix, order, alphabet):
-    if order == "t":
-        text_array = np.ravel(matrix, order="F")
-    else:
-        text_array = np.ravel(matrix)
-    text = ""
-    for i in range(len(text_array)):
-        text = text + alphabet[text_array[i]]
-    return text
-
-
-# Check if the key is invertible and in that case returns the inverse of the matrix
-def get_inverse(matrix, alphabet):
-    alphabet_len = len(alphabet)
-    if math.gcd(int(round(np.linalg.det(matrix))), alphabet_len) == 1:
-        matrix = Matrix(matrix)
-        return np.matrix(matrix.inv_mod(alphabet_len))
-    else:
-        return None
-
-
-# Decrypt a Message and returns the plaintext matrix
-def decrypt(k_inverse, c, alphabet):
-    return encrypt(k_inverse, c, alphabet)
-
-
-def get_m():
-    while True:
-        try:
-            m = int(input("Insert the length of the grams (m): "))
-            if m >= 2:
-                return m
-            else:
-                print("\nYou must enter a number m >= 2\n")
-        except ValueError:
-            print("\nYou must enter a number m >= 2\n")
-
-
-# Force a Ciphertext (Known Plaintext Attack)
-def plaintext_attack(c, p_inverse, alphabet):
-    return encrypt(c, p_inverse, alphabet)
-
-
-def main():
-    while True:
-        # Ask the user what function wants to run
-        choice = menu()
-
-        # Get two dictionaries, english alphabet to numbers and numbers to english alphabet
-        alphabet, reverse_alphabet = get_alphabet()
-
-        # Run the function selected by the user
-        if choice == 1:
-            # Asks the user the plaintext and the key for the encryption and checks the input
-            plaintext = get_text_input("\nInsert the text to be encrypted: ", alphabet)
-            key = get_text_input("Insert the key for encryption: ", alphabet)
-
-            if is_square(key):
-                # Get the key matrix k
-                k = get_key_matrix(key, alphabet)
-                print("\nKey Matrix:\n", k)
-
-                # Get the m-grams matrix p of the plaintext
-                p = get_text_matrix(plaintext, k.shape[0], alphabet)
-                print("Plaintext Matrix:\n", p)
-
-                input("\nPress Enter to begin te encryption.")
-                # Encrypt the plaintext
-                c = encrypt(k, p, alphabet)
-
-                # Transform the ciphertext matrix to a text of the alphabet
-                ciphertext = matrix_to_text(c, "t", reverse_alphabet)
-
-                print("\nThe message has been encrypted.\n")
-                print("Generated Ciphertext: ", ciphertext)
-                print("Generated Ciphertext Matrix:\n", c, "\n")
-            else:
-                print("\nThe length of the key must be a square and >= 2.\n")
-
-        elif choice == 2:
-            # Asks the user the ciphertext and the key for the encryption and checks the input
-            ciphertext = get_text_input(
-                "\nInsert the ciphertext to be decrypted: ", alphabet
+        for i in range(0, len(text) - self.break_key + 1, self.break_key):
+            batch = text[i : i + self.break_key]
+            vec = [self.replace_letters(char) for char in batch]
+            batch_vec = numpy.array([vec]).T
+            batch_encrypted = self.modulus(self.encrypt_key.dot(batch_vec)).T.tolist()[
+                0
+            ]
+            encrypted_batch = "".join(
+                self.replace_digits(num) for num in batch_encrypted
             )
-            key = get_text_input("Insert the key for decryption: ", alphabet)
+            encrypted += encrypted_batch
 
-            if is_square(key):
-                # Get the key matrix k
-                k = get_key_matrix(key, alphabet)
+        return encrypted
 
-                # Check if the key is invertible and in that case returns the inverse of the matrix
-                k_inverse = get_inverse(k, alphabet)
+    def make_decrypt_key(self) -> numpy.ndarray:
+        """
+        >>> hill_cipher = HillCipher(numpy.array([[2, 5], [1, 6]]))
+        >>> hill_cipher.make_decrypt_key()
+        array([[ 6, 25],
+               [ 5, 26]])
+        """
+        det = round(numpy.linalg.det(self.encrypt_key))
 
-                if k_inverse is not None:
-                    # Get the m-grams matrix c of the ciphertext
-                    c = get_text_matrix(ciphertext, k_inverse.shape[0], alphabet)
+        if det < 0:
+            det = det % len(self.key_string)
+        det_inv = None
+        for i in range(len(self.key_string)):
+            if (det * i) % len(self.key_string) == 1:
+                det_inv = i
+                break
 
-                    print("\nKey Matrix:\n", k)
-                    print("Ciphertext Matrix:\n", c)
+        inv_key = (
+            det_inv
+            * numpy.linalg.det(self.encrypt_key)
+            * numpy.linalg.inv(self.encrypt_key)
+        )
 
-                    input("\nPress Enter to begin the decryption.")
+        return self.to_int(self.modulus(inv_key))
 
-                    # Decrypt the ciphertext
-                    p = decrypt(k_inverse, c, alphabet)
+    def decrypt(self, text: str) -> str:
+        """
+        >>> hill_cipher = HillCipher(numpy.array([[2, 5], [1, 6]]))
+        >>> hill_cipher.decrypt('WHXYJOLM9C6XT085LL')
+        'TESTINGHILLCIPHERR'
+        >>> hill_cipher.decrypt('85FF00')
+        'HELLOO'
+        """
+        decrypt_key = self.make_decrypt_key()
+        text = self.process_text(text.upper())
+        decrypted = ""
 
-                    # Transform the ciphertext matrix to a text of the alphabet
-                    plaintext = matrix_to_text(p, "t", reverse_alphabet)
-
-                    print("\nThe message has been decrypted.\n")
-                    print("Generated Plaintext: ", plaintext)
-                    print("Generated Plaintext Matrix:\n", p, "\n")
-                else:
-                    print("\nThe matrix of the key provided is not invertible.\n")
-            else:
-                print("\nThe key must be a square and size >= 2.\n")
-
-        elif choice == 3:
-            # Asks the user the text and the ciphertext to use them for the plaintext attack
-            plaintext = get_text_input(
-                "\nInsert the plaintext for the attack: ", alphabet
+        for i in range(0, len(text) - self.break_key + 1, self.break_key):
+            batch = text[i : i + self.break_key]
+            vec = [self.replace_letters(char) for char in batch]
+            batch_vec = numpy.array([vec]).T
+            batch_decrypted = self.modulus(decrypt_key.dot(batch_vec)).T.tolist()[0]
+            decrypted_batch = "".join(
+                self.replace_digits(num) for num in batch_decrypted
             )
-            ciphertext = get_text_input(
-                "Insert the ciphertext of the plaintext for the attack: ", alphabet
-            )
+            decrypted += decrypted_batch
 
-            # Asks the user the length of the grams
-            m = get_m()
+        return decrypted
 
-            if len(plaintext) / m >= m:
-                # Get the m-grams matrix p of the plaintext and takes the firsts m
-                p = get_text_matrix(plaintext, m, alphabet)
-                p = p[:, 0:m]
 
-                # Check if the matrix of the plaintext is invertible and in that case returns the inverse of the matrix
-                p_inverse = get_inverse(p, alphabet)
+def main() -> None:
+    N = int(input("Enter the order of the encryption key: "))
+    hill_matrix = []
 
-                if p_inverse is not None:
-                    # Get the m-grams matrix c of the ciphertext
-                    c = get_text_matrix(ciphertext, m, alphabet)
-                    c = c[:, 0:m]
+    print("Enter each row of the encryption key with space separated integers")
+    for _ in range(N):
+        row = [int(x) for x in input().split()]
+        hill_matrix.append(row)
 
-                    if c.shape[1] == p.shape[0]:
-                        print("\nCiphertext Matrix:\n", c)
-                        print("Plaintext Matrix:\n", p)
+    hc = HillCipher(numpy.array(hill_matrix))
 
-                        input("\nPress Enter to begin the attack.")
-
-                        # Force the ciphertext provided
-                        k = plaintext_attack(c, p_inverse, alphabet)
-
-                        # Transform the key matrix to a text of the alphabet
-                        key = matrix_to_text(k, "k", reverse_alphabet)
-
-                        print("\nThe key has been found.\n")
-                        print("Generated Key: ", key)
-                        print("Generated Key Matrix:\n", k, "\n")
-                    else:
-                        print(
-                            "\nThe number of m-grams for plaintext and ciphertext are different.\n"
-                        )
-                else:
-                    print("\nThe matrix of the plaintext provided is not invertible.\n")
-            else:
-                print(
-                    "\nThe length of the plaintext must be compatible with the length of the grams (m).\n"
-                )
-        elif choice == 4:
-            sys.exit(0)
-        input("Press Enter to continue.\n")
+    print("Would you like to encrypt or decrypt some text? (1 or 2)")
+    option = input("\n1. Encrypt\n2. Decrypt\n")
+    if option == "1":
+        text_e = input("What text would you like to encrypt?: ")
+        print("Your encrypted text is:")
+        print(hc.encrypt(text_e))
+    elif option == "2":
+        text_d = input("What text would you like to decrypt?: ")
+        print("Your decrypted text is:")
+        print(hc.decrypt(text_d))
 
 
 if __name__ == "__main__":
+    import doctest
+
+    doctest.testmod()
     main()
