@@ -1,4 +1,20 @@
-# Windows configuration file.
-*.ini
 # Compiled Python files.
 *.pyc
+# Compiled WIndows binary
+*.exe
+*.ini
+# Jetbrainz Files.
+*.json
+*.xml
+*.iml
+# LyX files.
+*.lyx
+*.lyx~
+*.lyx#
+# Compiled DjVu Files.
+*.dvi
+# Configuration and Backup Files.
+*.bak
+*.ini
+*.bak0
+*.log
