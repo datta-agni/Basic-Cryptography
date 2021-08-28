@@ -23,6 +23,6 @@
 * Diffie-Hellmann Key Exchange
 * RSA
 
-### Cryptographical Hash Function:
+### Miscellaneous:
 
 * Base64 Conversion
