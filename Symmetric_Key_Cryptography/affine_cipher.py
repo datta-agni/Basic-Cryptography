@@ -1,5 +1,6 @@
 # Implementation of Affine Cipher in Python
 
+
 # Extended Euclidean Algorithm for finding modular inverse
 def euclid_gcd(a, b):
     x, y, u, v = 0, 1, 1, 0
@@ -25,12 +26,10 @@ def affine_encrypt(plaintext, key):
     """
     C = (a * P + b) % 26
     """
-    return "".join(
-        [
-            chr(((key[0] * (ord(t) - ord("A")) + key[1]) % 26) + ord("A"))
-            for t in plaintext.upper().replace(" ", "")
-        ]
-    )
+    return "".join([
+        chr(((key[0] * (ord(t) - ord("A")) + key[1]) % 26) + ord("A"))
+        for t in plaintext.upper().replace(" ", "")
+        ])
 
 
 # affine ciphertext decryption function returns original ciphertext
@@ -38,15 +37,11 @@ def affine_decrypt(ciphertext, key):
     """
     P = (a ^ ( -1 ) * ( C - b )) % 26
     """
-    return "".join(
-        [
-            chr(
-                ((modinv(key[0], 26) * (ord(charecter) - ord("A") - key[1])) % 26)
-                + ord("A")
-            )
-            for charecter in ciphertext
-        ]
-    )
+    return "".join([
+        chr(((modinv(key[0], 26) *
+              (ord(charecter) - ord("A") - key[1])) % 26) + ord("A"))
+        for charecter in ciphertext
+        ])
 
 
 def main():
@@ -61,7 +56,11 @@ def main():
     print("Encrypted Text: {}".format(affine_encrypted_text))
 
     # calling decryption function
-    print("Decrypted Text: {}".format(affine_decrypt(affine_encrypted_text, key)))
+    print(
+        "Decrypted Text: {}".format(
+            affine_decrypt(affine_encrypted_text, key)
+            )
+        )
 
 
 if __name__ == "__main__":

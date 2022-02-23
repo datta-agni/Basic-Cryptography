@@ -4,7 +4,7 @@ key = key.upper()
 
 
 def matrix(x, y, initial):
-    return [[initial for i in range(x)] for j in range(y)]
+    return [[initial for _ in range(x)] for _ in range(y)]
 
 
 """Starting initialization"""
@@ -62,7 +62,7 @@ def encrypt():
     for s in range(0, len(message) + 1, 2):
         if s < len(message) - 1:
             if message[s] == message[s + 1]:
-                message = message[: s + 1] + "X" + message[s + 1 :]
+                message = message[:s + 1] + "X" + message[s + 1:]
     if len(message) % 2 != 0:
         message = message[:] + "X"
     print("CIPHER TEXT:", end=" ")
@@ -76,25 +76,25 @@ def encrypt():
                 "{}{}".format(
                     matrix[(location[0] + 1) % 5][location[1]],
                     matrix[(location1[0] + 1) % 5][location1[1]],
-                ),
+                    ),
                 end=" ",
-            )
+                )
         elif location[0] == location1[0]:
             print(
                 "{}{}".format(
                     matrix[location[0]][(location[1] + 1) % 5],
                     matrix[location1[0]][(location1[1] + 1) % 5],
-                ),
+                    ),
                 end=" ",
-            )
+                )
         else:
             print(
                 "{}{}".format(
                     matrix[location[0]][location1[1]],
                     matrix[location1[0]][location[1]],
-                ),
+                    ),
                 end=" ",
-            )
+                )
         i = i + 2
 
 
@@ -115,25 +115,25 @@ def decrypt():
                 "{}{}".format(
                     matrix[(location[0] - 1) % 5][location[1]],
                     matrix[(location1[0] - 1) % 5][location1[1]],
-                ),
+                    ),
                 end=" ",
-            )
+                )
         elif location[0] == location1[0]:
             print(
                 "{}{}".format(
                     matrix[location[0]][(location[1] - 1) % 5],
                     matrix[location1[0]][(location1[1] - 1) % 5],
-                ),
+                    ),
                 end=" ",
-            )
+                )
         else:
             print(
                 "{}{}".format(
                     matrix[location[0]][location1[1]],
                     matrix[location1[0]][location[1]],
-                ),
+                    ),
                 end=" ",
-            )
+                )
         i = i + 2
 
 

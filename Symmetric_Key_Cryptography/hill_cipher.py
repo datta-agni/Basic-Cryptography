@@ -20,8 +20,11 @@ class HillCipher:
         """
         encrypt_key is an NxN numpy array
         """
-        self.encrypt_key = self.modulus(encrypt_key)  # mod36 calc's on the encrypt key
-        self.check_determinant()  # validate the determinant of the encryption key
+        self.encrypt_key = self.modulus(
+            encrypt_key
+            )               # mod36 calc's on the encrypt key
+        self.check_determinant(
+        )               # validate the determinant of the encryption key
         self.break_key = encrypt_key.shape[0]
 
     def replace_letters(self, letter: str) -> int:
@@ -59,7 +62,7 @@ class HillCipher:
             raise ValueError(
                 f"determinant modular {req_l} of encryption key({det}) is not co prime "
                 f"w.r.t {req_l}.\nTry another key."
-            )
+                )
 
     def process_text(self, text: str) -> str:
         """
@@ -89,15 +92,14 @@ class HillCipher:
         encrypted = ""
 
         for i in range(0, len(text) - self.break_key + 1, self.break_key):
-            batch = text[i : i + self.break_key]
+            batch = text[i:i + self.break_key]
             vec = [self.replace_letters(char) for char in batch]
             batch_vec = numpy.array([vec]).T
-            batch_encrypted = self.modulus(self.encrypt_key.dot(batch_vec)).T.tolist()[
-                0
-            ]
+            batch_encrypted = self.modulus(self.encrypt_key.dot(batch_vec)
+                                           ).T.tolist()[0]
             encrypted_batch = "".join(
                 self.replace_digits(num) for num in batch_encrypted
-            )
+                )
             encrypted += encrypted_batch
 
         return encrypted
@@ -120,10 +122,9 @@ class HillCipher:
                 break
 
         inv_key = (
-            det_inv
-            * numpy.linalg.det(self.encrypt_key)
-            * numpy.linalg.inv(self.encrypt_key)
-        )
+            det_inv * numpy.linalg.det(self.encrypt_key) *
+            numpy.linalg.inv(self.encrypt_key)
+            )
 
         return self.to_int(self.modulus(inv_key))
 
@@ -140,13 +141,14 @@ class HillCipher:
         decrypted = ""
 
         for i in range(0, len(text) - self.break_key + 1, self.break_key):
-            batch = text[i : i + self.break_key]
+            batch = text[i:i + self.break_key]
             vec = [self.replace_letters(char) for char in batch]
             batch_vec = numpy.array([vec]).T
-            batch_decrypted = self.modulus(decrypt_key.dot(batch_vec)).T.tolist()[0]
+            batch_decrypted = self.modulus(decrypt_key.dot(batch_vec)
+                                           ).T.tolist()[0]
             decrypted_batch = "".join(
                 self.replace_digits(num) for num in batch_decrypted
-            )
+                )
             decrypted += decrypted_batch
 
         return decrypted

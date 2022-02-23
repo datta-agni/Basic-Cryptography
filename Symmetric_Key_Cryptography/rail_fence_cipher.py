@@ -7,7 +7,7 @@ def fence(lst, rail):
     for n, x in enumerate(lst):
         fence[rails[n % len(rails)]][n] = x
 
-    if 0:  # debug
+    if 0:               # debug
         for rail in fence:
             print(''.join('.' if c is None else str(c) for c in rail))
 

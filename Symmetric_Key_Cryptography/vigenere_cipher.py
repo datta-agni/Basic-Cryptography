@@ -31,7 +31,8 @@ def decrypt(message, key):
 
 def main():
     text = str(
-        input("Enter a string to be encoded or decoded in Vigenere Cipher\n"))
+        input("Enter a string to be encoded or decoded in Vigenere Cipher\n")
+        )
     key = str(input("Enter the Vigenere Cipher Key:\n"))
 
     enc = encrypt(text, key)

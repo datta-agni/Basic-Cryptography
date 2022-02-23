@@ -1,5 +1,4 @@
 import math
-
 """
 Used for ceiling function
 """
@@ -7,11 +6,12 @@ Used for ceiling function
 
 def encrypt_decrypt():
     key = (
-        input("Enter keyword text (Contains unique letters only): ")
-        .lower()
-        .replace(" ", "")
-    )
-    plain_text = input("Enter plain text (Letters only): ").lower().replace(" ", "")
+        input("Enter keyword text (Contains unique letters only): "
+              ).lower().replace(" ", "")
+        )
+    plain_text = input("Enter plain text (Letters only): ").lower().replace(
+        " ", ""
+        )
 
     length_key = len(key)
     length_plaintext = len(plain_text)
@@ -21,7 +21,7 @@ def encrypt_decrypt():
     # print(matrix)
     t = 0
     for r in range(row):
-        for c, charecter in enumerate(plain_text[t : t + length_key]):
+        for c, charecter in enumerate(plain_text[t:t + length_key]):
             matrix[r][c] = charecter
         t += length_key
 
@@ -46,7 +46,7 @@ def encrypt_decrypt():
 
     t = 0
     for c in key_order:
-        for r, charecter in enumerate(cipher_text[t : t + row]):
+        for r, charecter in enumerate(cipher_text[t:t + row]):
             matrix_new[r][c] = charecter
         t += row
     # print(matrix_new)

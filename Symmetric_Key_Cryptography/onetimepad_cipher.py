@@ -30,7 +30,7 @@ def make_pad(name, pad_size, key_size):
         f"#name={name}",
         f"#size={pad_size}",
         *make_keys(pad_size, key_size),
-    ]
+        ]
 
     return "\n".join(pad)
 
@@ -128,22 +128,24 @@ if __name__ == "__main__":
         help=(
             "Path to one-time pad. If neither --encrypt or --decrypt "
             "are given, will create a new pad."
-        ),
-    )
+            ),
+        )
 
     parser.add_argument(
         "--length",
         type=int,
         default=10,
-        help="Pad size. Ignored if --encrypt or --decrypt are given. Defaults to 10.",
-    )
+        help=
+        "Pad size. Ignored if --encrypt or --decrypt are given. Defaults to 10.",
+        )
 
     parser.add_argument(
         "--key-size",
         type=int,
         default=64,
-        help="Key size in bytes. Ignored if --encrypt or --decrypt are given. Defaults to 64.",
-    )
+        help=
+        "Key size in bytes. Ignored if --encrypt or --decrypt are given. Defaults to 64.",
+        )
 
     parser.add_argument(
         "-o",
@@ -153,8 +155,8 @@ if __name__ == "__main__":
         help=(
             "Write encoded/decoded message to a file. Ignored if --encrypt or "
             "--decrypt is not given. Defaults to stdout."
-        ),
-    )
+            ),
+        )
 
     group = parser.add_mutually_exclusive_group()
 
@@ -163,13 +165,13 @@ if __name__ == "__main__":
         metavar="FILE",
         type=argparse.FileType("rb"),
         help="Encrypt FILE using the next available key from pad.",
-    )
+        )
     group.add_argument(
         "--decrypt",
         metavar="FILE",
         type=argparse.FileType("rb"),
         help="Decrypt FILE using the next available key from pad.",
-    )
+        )
 
     args = parser.parse_args()
 
