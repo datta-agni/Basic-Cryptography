@@ -13,7 +13,7 @@ def modular_inverse(number1: int, number2: int) -> tuple[int, int, int]:
         return (number2, 0, 1)
     else:
         g, y, x = modular_inverse(number2 % number1, number1)
-        return (g, x - (number2 // number1) * y, y)
+        return g, x - (number2 // number1) * y, y
 
 
 def gcd(number1: int, number2: int) -> int:
@@ -40,7 +40,7 @@ def try_composite(a: int, d: int, n: int, s: int) -> bool:
     return True
 
 
-def is_prime(n: int, precision_for_huge_n: int = 32) -> bool:
+def is_prime(n: int, precision_for_huge_n: int = 128) -> bool:
     """
     checks if a number is a prime through miller-rabin primality test.
     """

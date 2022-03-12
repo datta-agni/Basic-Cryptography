@@ -2,7 +2,7 @@
 
 
 # Extended Euclidean Algorithm for finding modular inverse
-def euclid_gcd(a, b):
+def euclid_gcd(a: int, b: int) -> tuple[int, int, int]:
     x, y, u, v = 0, 1, 1, 0
     while a != 0:
         q, r = b // a, b % a
@@ -13,27 +13,27 @@ def euclid_gcd(a, b):
 
 
 # modular inverse does not exist
-def modinv(a, m):
+def modinv(a: int, m: int) -> int:
     gcd, x, y = euclid_gcd(a, m)
     if gcd != 1:
-        return None
+        return 0
     else:
         return x % m
 
 
 # affine ciphertext encryption function returns the ciphertext
-def affine_encrypt(plaintext, key):
+def affine_encrypt(plaintext: str, key: int) -> str:
     """
     C = (a * P + b) % 26
     """
     return "".join([
         chr(((key[0] * (ord(t) - ord("A")) + key[1]) % 26) + ord("A"))
-        for t in plaintext.upper().replace(" ", "")
+        for _ in plaintext.upper().replace(" ", "")
         ])
 
 
 # affine ciphertext decryption function returns original ciphertext
-def affine_decrypt(ciphertext, key):
+def affine_decrypt(ciphertext: str, key: int) -> str:
     """
     P = (a ^ ( -1 ) * ( C - b )) % 26
     """
@@ -44,12 +44,12 @@ def affine_decrypt(ciphertext, key):
         ])
 
 
-def main():
-    # declaring ciphertext and key
+def main() -> None:
+    # declaring ciphertext and key.
     message = str(input("Enter the message you want to encrypt: "))
     key1 = int(input("Enter the first half of the key of encryption: "))
     key2 = int(input("Enter the second half of the key of encryption: "))
-    key = [key1, key2]
+    key: list[int] = [key1, key2]
 
     # calling encryption function
     affine_encrypted_text = affine_encrypt(message, key)

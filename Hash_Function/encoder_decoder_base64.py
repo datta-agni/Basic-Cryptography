@@ -1,7 +1,7 @@
 import base64
 
 
-def encode_decode():
+def encode_decode() -> None:
     print("1 to encode and 2 to decode")
     choice = int(input())
     enter = input().encode('utf-8')

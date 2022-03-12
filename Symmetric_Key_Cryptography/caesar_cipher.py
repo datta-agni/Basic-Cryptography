@@ -40,7 +40,7 @@ def brute_force(input_string: str,
     alpha = alphabet or ascii_letters
 
     # To store data on all the combinations
-    brute_force_data = {}
+    brute_force_data: dict[int, str] = {}
 
     # Cycle through each combination
     for key in range(1, len(alpha) + 1):
