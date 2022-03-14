@@ -138,7 +138,7 @@ def generate_key_pair() -> tuple[tuple[int, int], tuple[int, int]]:
     if d < 0:
         d += phi
 
-    return ((e, n), (d, n))
+    return (e, n), (d, n)
 
 
 def decrypt(ciphertext: str, private_key: tuple[int, int]):
