@@ -97,13 +97,15 @@ def generate_key_pair() -> tuple[tuple[int, int], tuple[int, int]]:
     """
 
     # Returns a non-negative Python integer with k random bits.
-    # This method is supplied with the MersenneTwister Generator.
+    # This method is supplied with the Mersenne Twister Generator.
     length = int(
         input(
             """
+            \n
             Enter the number of bits for generation.
             It should be above 128bits.
             ENTER :
+            \n
             """
             )
         )
