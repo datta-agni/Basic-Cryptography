@@ -1,7 +1,7 @@
 # Reverse string cipher
 
 
-def rev_string_cipher(text: str):
+def rev_string_cipher(text: str) -> None:
     # function reverses the given string
     size: int = len(text) - 1
     encoded = ""

@@ -1,149 +1,106 @@
-key = input("Enter key: ")
-key = key.replace(" ", "")
-key = key.upper()
+import string
+import itertools
 
 
-def matrix(x, y, initial):
-    return [[initial for _ in range(x)] for _ in range(y)]
+def chunker(seq, size)->tuple[]:
+    it = iter(seq)
+    while True:
+        chunk = tuple(itertools.islice(it, size))
+        if not chunk:
+            return
+        yield chunk
 
 
-"""Starting initialization"""
-k = 0
-flag = 0
-result = list()
-# storing the key
-for c in key:
-    if c not in result:
-        if c == "J":
-            result.append("I")
-        else:
-            result.append(c)
+def prepare_input(dirty):
+    """
+    Prepare the plaintext by up-casing it
+    and separating repeated letters with X's
+    """
 
-# storing the other available characters
-for i in range(65, 91):
-    if chr(i) not in result:
-        if i == 73 and chr(74) not in result:
-            result.append("I")
-            flag = 1
-        elif flag == 0 and i == 73 or i == 74:
-            pass
-        else:
-            result.append(chr(i))
+    dirty = ''.join([c.upper() for c in dirty if c in string.ascii_letters])
+    clean = ""
 
-# initialize matrix
-matrix = matrix(5, 5, 0)
-# making matrix
-for i in range(0, 5):
-    for j in range(0, 5):
-        matrix[i][j] = result[k]
-        k += 1
-"""Ending initialization"""
+    if len(dirty) < 2:
+        return dirty
+
+    for i in range(len(dirty) - 1):
+        clean += dirty[i]
+
+        if dirty[i] == dirty[i + 1]:
+            clean += 'X'
+
+    clean += dirty[-1]
+
+    if len(clean) & 1:
+        clean += 'X'
+
+    return clean
 
 
-# get location of each character
-def locindex(c):
-    location = list()
-    if c == "J":
-        c = "I"
-    for i, j in enumerate(matrix):
-        for k, l in enumerate(j):
-            if c == l:
-                location.append(i)
-                location.append(k)
-                return location
+def generate_table(key:str)->list[str]:
+
+    # I and J are used interchangeably to allow
+    # us to use a 5x5 table (25 letters)
+    alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+    # we're using a list instead of a '2d' array because it makes the math
+    # for setting up the table and doing the actual encoding/decoding simpler
+    table = []
+
+    # copy key chars into the table if they are in `alphabet` ignoring duplicates
+    for char in key.upper():
+        if char not in table and char in alphabet:
+            table.append(char)
+
+    # fill the rest of the table in with the remaining alphabet chars
+    for char in alphabet:
+        if char not in table:
+            table.append(char)
+
+    return table
 
 
-# Encryption
-def encrypt():
-    message = str(input("ENTER MESSAGE: "))
-    message = message.upper()
-    message = message.replace(" ", "")
-    i = 0
-    for s in range(0, len(message) + 1, 2):
-        if s < len(message) - 1:
-            if message[s] == message[s + 1]:
-                message = message[:s + 1] + "X" + message[s + 1:]
-    if len(message) % 2 != 0:
-        message = message[:] + "X"
-    print("CIPHER TEXT:", end=" ")
-    while i < len(message):
-        location = list()
-        location = locindex(message[i])
-        location1 = list()
-        location1 = locindex(message[i + 1])
-        if location[1] == location1[1]:
-            print(
-                "{}{}".format(
-                    matrix[(location[0] + 1) % 5][location[1]],
-                    matrix[(location1[0] + 1) % 5][location1[1]],
-                    ),
-                end=" ",
-                )
-        elif location[0] == location1[0]:
-            print(
-                "{}{}".format(
-                    matrix[location[0]][(location[1] + 1) % 5],
-                    matrix[location1[0]][(location1[1] + 1) % 5],
-                    ),
-                end=" ",
-                )
-        else:
-            print(
-                "{}{}".format(
-                    matrix[location[0]][location1[1]],
-                    matrix[location1[0]][location[1]],
-                    ),
-                end=" ",
-                )
-        i = i + 2
+def encode(plaintext, key):
+    table = generate_table(key)
+    plaintext = prepare_input(plaintext)
+    ciphertext = ""
+
+    for char1, char2 in chunker(plaintext, 2):
+        row1, col1 = divmod(table.index(char1), 5)
+        row2, col2 = divmod(table.index(char2), 5)
+
+        if row1 == row2:
+            ciphertext += table[row1 * 5 + (col1 + 1) % 5]
+            ciphertext += table[row2 * 5 + (col2 + 1) % 5]
+        elif col1 == col2:
+            ciphertext += table[((row1 + 1) % 5) * 5 + col1]
+            ciphertext += table[((row2 + 1) % 5) * 5 + col2]
+        else:               # rectangle
+            ciphertext += table[row1 * 5 + col2]
+            ciphertext += table[row2 * 5 + col1]
+
+    return ciphertext
 
 
-# decryption
-def decrypt():
-    message = str(input("ENTER CIPHERTEXT: "))
-    message = message.upper()
-    message = message.replace(" ", "")
-    print("PLAINTEXT: ", end=" ")
-    i = 0
-    while i < len(message):
-        location = list()
-        location = locindex(message[i])
-        location1 = list()
-        location1 = locindex(message[i + 1])
-        if location[1] == location1[1]:
-            print(
-                "{}{}".format(
-                    matrix[(location[0] - 1) % 5][location[1]],
-                    matrix[(location1[0] - 1) % 5][location1[1]],
-                    ),
-                end=" ",
-                )
-        elif location[0] == location1[0]:
-            print(
-                "{}{}".format(
-                    matrix[location[0]][(location[1] - 1) % 5],
-                    matrix[location1[0]][(location1[1] - 1) % 5],
-                    ),
-                end=" ",
-                )
-        else:
-            print(
-                "{}{}".format(
-                    matrix[location[0]][location1[1]],
-                    matrix[location1[0]][location[1]],
-                    ),
-                end=" ",
-                )
-        i = i + 2
+def decode(ciphertext, key):
+    table = generate_table(key)
+    plaintext = ""
+
+    for char1, char2 in chunker(ciphertext, 2):
+        row1, col1 = divmod(table.index(char1), 5)
+        row2, col2 = divmod(table.index(char2), 5)
+
+        if row1 == row2:
+            plaintext += table[row1 * 5 + (col1 - 1) % 5]
+            plaintext += table[row2 * 5 + (col2 - 1) % 5]
+        elif col1 == col2:
+            plaintext += table[((row1 - 1) % 5) * 5 + col1]
+            plaintext += table[((row2 - 1) % 5) * 5 + col2]
+        else:               # rectangle
+            plaintext += table[row1 * 5 + col2]
+            plaintext += table[row2 * 5 + col1]
+
+    return plaintext
 
 
-while 1:
-    choice = int(input("\n1.) Encryption: \n2.) Decryption: \n3.) Exit\n"))
-    if choice == 1:
-        encrypt()
-    elif choice == 2:
-        decrypt()
-    elif choice == 3:
-        exit()
-    else:
-        print("Choose correct choice!")
+print("cipher text : " + encode("Modasa", "playfair"))
+print("plain text : " + decode("GTBFQY", "playfair"))

@@ -1,36 +1,37 @@
-# RailFence Cipher
+# Rail Fence Cipher
 
 
-def fence(lst, rail):
-    fence = [[None] * len(lst) for n in range(rail)]
-    rails = range(rail - 1) + range(rail - 1, 0, -1)
-    for n, x in enumerate(lst):
-        fence[rails[n % len(rails)]][n] = x
+def main() -> None:
+    # get the number of layers to rail encrypt.
+    layers = int(input("Enter the number of layers: "))
 
-    if 0:               # debug
-        for rail in fence:
-            print(''.join('.' if c is None else str(c) for c in rail))
+    # get the plain text.
+    plain_text = input("Enter the plain text: ")
 
-    return [c for rail in fence for c in rail if c is not None]
-
-
-def encode(text, n):
-    return ''.join(fence(text, n))
+    # encrypt the plain text.
+    cipher_text = encrypt(layers, plain_text)
+    print("Encrypted text: " + cipher_text)
 
 
-def decode(text, n):
-    rng = range(len(text))
-    pos = fence(rng, n)
-    return ''.join(text[pos.index(n)] for n in rng)
+def encrypt(layers: int, plain_text: str) -> str:
+    # remove all white spaces in text.
+    plain_text = plain_text.replace(" ", "")
 
+    # change plain text to upper case.
+    plain_text = plain_text.upper()
 
-def main():
-    text = str(input('Enter the Plaintext: '))
-    rail_level = int(input("Enter rails(level): "))
-    z = encode(text, rail_level)
-    print(z)
-    y = decode(z, rail_level)
-    print(y)
+    # divide plain text into layers number of strings.
+    rail: list[str] = [""] * layers
+    layer: int = 0
+    for character in plain_text:
+        rail[layer] += character
+        if layer >= layers - 1:
+            layer = 0
+        else:
+            layer += 1
+
+    cipher: str = "".join(rail)
+    return cipher
 
 
 if __name__ == '__main__':

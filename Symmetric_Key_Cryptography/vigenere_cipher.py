@@ -3,44 +3,46 @@
 from itertools import starmap, cycle
 
 
-def encrypt(message, key):
-    # Vigenere encryption of message using key.
+def encrypt(message: str, key: str) -> str:
+    """
+    Vigenere encryption of message using key.
+    Converted to uppercase.
+    Non-alpha characters stripped out.
+    """
 
-    # Converted to uppercase.
-    # Non-alpha characters stripped out.
-    message = filter(str.isalpha, message.upper())
+    message = str(filter(str.isalpha, message.upper()))
 
-    def enc(c, k):
+    def encode(c: str, k: str) -> str:
         # Single letter encryption.
-
         return chr(((ord(k) + ord(c) - 2 * ord('A')) % 26) + ord('A'))
 
-    return ''.join(starmap(enc, zip(message, cycle(key))))
+    return ''.join(starmap(encode, zip(message, cycle(key))))
 
 
-def decrypt(message, key):
-    # Vigenere decryption of message using key.
+def decrypt(message: str, key: str) -> str:
+    """
+    Vigenere decryption of message using key.
+    """
 
-    def dec(c, k):
+    def decode(c: str, k: str) -> str:
         # Single letter decryption.
-
         return chr(((ord(c) - ord(k) - 2 * ord('A')) % 26) + ord('A'))
 
-    return ''.join(starmap(dec, zip(message, cycle(key))))
+    return ''.join(starmap(decode, zip(message, cycle(key))))
 
 
-def main():
+def main() -> None:
     text = str(
         input("Enter a string to be encoded or decoded in Vigenere Cipher\n")
         )
     key = str(input("Enter the Vigenere Cipher Key:\n"))
 
-    enc = encrypt(text, key)
-    dec = decrypt(enc, key)
+    enc: str = encrypt(text, key)
+    dec: str = decrypt(enc, key)
 
-    print("ORIGINAL TEXT: ", text)
-    print("ENCRYPTED TEXT: ", enc)
-    print("DECRYPTED TEXT: ", dec)
+    print("Original Text: ", text)
+    print("Encrypted Text: ", enc)
+    print("Decrypted Text: ", dec)
 
 
 if __name__ == '__main__':

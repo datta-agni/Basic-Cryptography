@@ -4,7 +4,7 @@ Used for ceiling function
 """
 
 
-def encrypt_decrypt():
+def encrypt_decrypt() -> None:
     key = (
         input("Enter keyword text (Contains unique letters only): "
               ).lower().replace(" ", "")
@@ -16,7 +16,7 @@ def encrypt_decrypt():
     length_key = len(key)
     length_plaintext = len(plain_text)
     row = int(math.ceil(length_plaintext / length_key))
-    matrix = [["X"] * length_key for i in range(row)]
+    matrix = [["X"] * length_key for _ in range(row)]
 
     # print(matrix)
     t = 0
@@ -39,7 +39,7 @@ def encrypt_decrypt():
     print("Plaintext is :", plain_text)
     print("Ciphertext is :", cipher_text)
 
-    matrix_new = [["X"] * length_key for i in range(row)]
+    matrix_new = [["X"] * length_key for _ in range(row)]
     # to make original key order when we know keyword
     key_order = [key.index(charecter) for charecter in sorted(list(key))]
     # print(key_order)

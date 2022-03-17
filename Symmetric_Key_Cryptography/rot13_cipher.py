@@ -15,7 +15,6 @@ def dencrypt(message: str, n: int = 13) -> str:
 
 def main() -> None:
     plaintext = input("Enter message: ")
-
     ciphertext = dencrypt(plaintext, 13)
     print("Encryption:", ciphertext)
 
