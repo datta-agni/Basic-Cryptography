@@ -103,7 +103,7 @@ def generate_key_pair() -> tuple[tuple[int, int], tuple[int, int]]:
             """
             \n
             Enter the number of bits for generation.
-            It should be above 128bits.
+            It should be above 128-bit.
             ENTER :
             \n
             """
@@ -149,7 +149,7 @@ def decrypt(ciphertext: str, private_key: tuple[int, int]):
     """
     try:
         key, n = private_key
-        text = [chr(pow(int(char), key, n)) for char in ciphertext]
+        text = str([chr(pow(int(char), key, n)) for char in ciphertext])
         return "".join(text)
     except TypeError as e:
         print(e)
@@ -160,7 +160,7 @@ def encrypt(text: str, public_key: tuple[int, int]) -> str:
     function used for encryption.
     """
     key, n = public_key
-    ciphertext: str = str([pow(ord(char), key, n) for char in text])
+    ciphertext: str = [pow(ord(char), key, n) for char in text]
     return ciphertext
 
 
